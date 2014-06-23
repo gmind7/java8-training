@@ -1,10 +1,9 @@
-package io.gmind.java8;
+package io.gmind.java8.other;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 
 /**
  * Created by gmind on 2014-06-19.

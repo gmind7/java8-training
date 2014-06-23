@@ -1,4 +1,4 @@
-package io.gmind.java8;
+package io.gmind.java8.lambda;
 
 import lombok.extern.slf4j.Slf4j;
 

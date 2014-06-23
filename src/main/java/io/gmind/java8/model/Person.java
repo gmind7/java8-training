@@ -1,4 +1,4 @@
-package io.gmind.java8;
+package io.gmind.java8.model;
 
 import lombok.Data;
 
@@ -11,9 +11,10 @@ public class Person {
 	String firstName;
 	String lastName;
 
-	Person() {}
+	public Person() {
+    }
 
-	Person(String firstName, String lastName) {
+    public Person(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}

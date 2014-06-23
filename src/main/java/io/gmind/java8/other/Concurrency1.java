@@ -1,4 +1,4 @@
-package io.gmind.java8;
+package io.gmind.java8.other;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;

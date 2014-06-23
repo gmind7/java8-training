@@ -1,4 +1,4 @@
-package io.gmind.java8;
+package io.gmind.java8.stream;
 
 import java.util.ArrayList;
 import java.util.List;
