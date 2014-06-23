@@ -1,4 +1,4 @@
-package io.gmind.java8.other;
+package io.gmind.java8.misc;
 
 import java.lang.annotation.*;
 
