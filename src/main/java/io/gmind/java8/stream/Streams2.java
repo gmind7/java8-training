@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by gmind on 2014-06-19.
@@ -26,6 +27,12 @@ public class Streams2 {
 
 		// sorting
 		stringCollection.stream().sorted().forEach(a -> log.debug("forEach : {}", a));
-		log.debug("stringCollection : {}", stringCollection);
+        log.debug("stringCollection : {}", stringCollection);
+
+        /**
+         * collect의 Collectors를 이용하여 map, set, list 형태로 결과를 리턴 받을 수 있다.
+         */
+        List<String> result = stringCollection.stream().sorted().collect(Collectors.toList());
+        log.debug("Collect Result : {}", result.toString());
 	}
 }
