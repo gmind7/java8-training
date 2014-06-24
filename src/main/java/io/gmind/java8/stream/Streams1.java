@@ -85,7 +85,7 @@ public class Streams1 {
 
         /**
          * flatMap (monads)
-         * 제너릭 타입 G(예를 들면, Stream), 타입 T를 함수f(G<U>)로 변환하는 함수, 타입 U를 g(G<V>)로 변환하는 함수 두개가 있다고 가정.
+         * 제너릭 타입 G(예를 들면, Stream), 타입 T를 함수f(G<U>)로 변환, 타입 U를 g(G<V>)로 변환하는 f,g 함수 두개가 있다고 가정.
          * f를 적용하고 g를 적용... 즉... patterns을 다시 stream 으로 적용해서 반환...
          */
         List<String> flatMapSource = new ArrayList<>();
