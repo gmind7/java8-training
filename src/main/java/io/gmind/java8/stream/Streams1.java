@@ -1,8 +1,11 @@
 package io.gmind.java8.stream;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -102,8 +105,39 @@ public class Streams1 {
 		 */
 		Optional<String> reduced = stringCollection.stream().sorted().reduce((s1, s2) -> s1 + "#" + s2);
 		reduced.ifPresent(a -> log.debug("Reduce reduced : {}", a));
-
 		//aaa1#aaa2#bbb1#bbb2#bbb3#ccc#ddd1#ddd2
-	}
+
+        List<String> resultList = stringCollection.stream().map(str -> "map: " + str).collect(Collectors.toList());
+        log.debug("resultList : {}",resultList.toString());
+
+        /**
+         * Map
+         * 스트림에 있는 값들을 특정 방식으로 변환하고 싶을 때 사용하고 변환을 수행하는 함수를 파라미터로 전달한다.
+         */
+        List<String> mapSource = new ArrayList<>();
+        mapSource.add("aaa");
+        mapSource.add("bbb");
+
+        mapSource.stream().map(s -> s.charAt(0)).forEach(value -> log.debug("Map Value : {}", value));
+
+        /**
+         * flatMap (monads)
+         * 제너릭 타입 G(예를 들면, Stream), 타입 T를 함수f(G<U>)로 변환하는 함수, 타입 U를 g(G<V>)로 변환하는 함수 두개가 있다고 가정.
+         * f를 적용하고 g를 적용... 즉... patterns을 다시 stream 으로 적용해서 반환...
+         */
+        List<String> flatMapSource = new ArrayList<>();
+        flatMapSource.add( "Peak Usage    : init:2359296, used:13914944, committed:13959168, max:50331648Current Usage : init:2359296, used:13913536, committed:13959168, max:50331648|------------------| committed:13.31Mb+---------------------------------------------------------------------+|//////////////////|                                                  | max:48Mb+---------------------------------------------------------------------+|------------------| used:13.27Mb");
+        flatMapSource.add( "Peak Usage    : init:2359296, used:13916608, committed:13959168, max:50331648Current Usage : init:2359297, used:13915200, committed:13959168, max:50331648|------------------| committed:13.31Mb+---------------------------------------------------------------------+|//////////////////|                                                  | max:48Mb+---------------------------------------------------------------------+|------------------| used:13.27Mb");
+
+        List<Pattern> patterns = Arrays.asList(Pattern.compile("Current.*?[/|]"), Pattern.compile("[0-9]+(/,|/|)"));
+
+        log.debug("patterns : {}",patterns);
+        //Style 1
+        patterns.stream().flatMap(p1 -> flatMapSource.stream().map(p1::matcher).filter(Matcher::find).map(Matcher::group)).forEach(x -> log.debug("flatmap style1 value : {}", x));
+
+        //Style 2
+        patterns.stream().flatMap(p1 -> flatMapSource.stream().map(p1::matcher).filter(Matcher::find).map(matcher -> matcher.group())).forEach(x -> log.debug("flatmap style2 value : {}", x));
+
+    }
 
 }
