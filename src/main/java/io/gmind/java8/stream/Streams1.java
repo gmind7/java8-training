@@ -63,7 +63,7 @@ public class Streams1 {
 			.forEach(a -> log.debug("Sorting : {}", a));
 
 		/**
-		 * Mapping
+		 * Map (스트림에 있는 값들을 특정 방식으로 변환하고 싶을 때 사용하고 변환을 수행하는 함수를 파라미터로 전달한다.)
 		 * intermediate operation 인 map은 주어진 함수를 통해 각각의 element 를 또다른 오브젝트로 변환한다.
 		 * 다음에 나오는 예제는 각각의 문자를 대문자로 변환한다.
 		 * 허나 물론 또다른 타입으로 각각의 오브젝트를 변환하기 위해 map 을 사용할 수 도 있다.
@@ -77,11 +77,35 @@ public class Streams1 {
 
 		// "DDD2", "DDD1", "CCC", "BBB3", "BBB2", "AAA2", "AAA1"
 
+        List<String> mapSource = new ArrayList<>();
+        mapSource.add("aaa");
+        mapSource.add("bbb");
 
-		/**
-		 * Match
-		 * 다양한 매칭 연산들은 정확히 결정된 stream 매치인지를 체크하는데 사용된다. 이런 모든 연산들은 terminal 이고 boolean 결과를 리턴한다.
-		 */
+        mapSource.stream().map(s -> s.charAt(0)).forEach(value -> log.debug("Map Value : {}", value));
+
+        /**
+         * flatMap (monads)
+         * 제너릭 타입 G(예를 들면, Stream), 타입 T를 함수f(G<U>)로 변환하는 함수, 타입 U를 g(G<V>)로 변환하는 함수 두개가 있다고 가정.
+         * f를 적용하고 g를 적용... 즉... patterns을 다시 stream 으로 적용해서 반환...
+         */
+        List<String> flatMapSource = new ArrayList<>();
+        flatMapSource.add( "Peak Usage    : init:2359296, used:13914944, committed:13959168, max:50331648Current Usage : init:2359296, used:13913536, committed:13959168, max:50331648|------------------| committed:13.31Mb+---------------------------------------------------------------------+|//////////////////|                                                  | max:48Mb+---------------------------------------------------------------------+|------------------| used:13.27Mb");
+        flatMapSource.add( "Peak Usage    : init:2359296, used:13916608, committed:13959168, max:50331648Current Usage : init:2359297, used:13915200, committed:13959168, max:50331648|------------------| committed:13.31Mb+---------------------------------------------------------------------+|//////////////////|                                                  | max:48Mb+---------------------------------------------------------------------+|------------------| used:13.27Mb");
+
+        List<Pattern> patterns = Arrays.asList(Pattern.compile("Current.*?[/|]"), Pattern.compile("[0-9]+(/,|/|)"));
+
+        log.debug("patterns : {}",patterns);
+        //Style 1
+        patterns.stream().flatMap(p1 -> flatMapSource.stream().map(p1::matcher).filter(Matcher::find).map(Matcher::group)).forEach(x -> log.debug("flatmap style1 value : {}", x));
+
+        //Style 2
+        patterns.stream().flatMap(p1 -> flatMapSource.stream().map(p1::matcher).filter(Matcher::find).map(matcher -> matcher.group())).forEach(x -> log.debug("flatmap style2 value : {}", x));
+
+
+        /**
+         * Match
+         * 다양한 매칭 연산들은 정확히 결정된 stream 매치인지를 체크하는데 사용된다. 이런 모든 연산들은 terminal 이고 boolean 결과를 리턴한다.
+         */
 		boolean anyStartsWithA = stringCollection.stream().anyMatch((s) -> s.startsWith("a"));
 		log.debug("Match anyStartsWithA : {}", anyStartsWithA); // true
 
@@ -109,34 +133,6 @@ public class Streams1 {
 
         List<String> resultList = stringCollection.stream().map(str -> "map: " + str).collect(Collectors.toList());
         log.debug("resultList : {}",resultList.toString());
-
-        /**
-         * Map
-         * 스트림에 있는 값들을 특정 방식으로 변환하고 싶을 때 사용하고 변환을 수행하는 함수를 파라미터로 전달한다.
-         */
-        List<String> mapSource = new ArrayList<>();
-        mapSource.add("aaa");
-        mapSource.add("bbb");
-
-        mapSource.stream().map(s -> s.charAt(0)).forEach(value -> log.debug("Map Value : {}", value));
-
-        /**
-         * flatMap (monads)
-         * 제너릭 타입 G(예를 들면, Stream), 타입 T를 함수f(G<U>)로 변환하는 함수, 타입 U를 g(G<V>)로 변환하는 함수 두개가 있다고 가정.
-         * f를 적용하고 g를 적용... 즉... patterns을 다시 stream 으로 적용해서 반환...
-         */
-        List<String> flatMapSource = new ArrayList<>();
-        flatMapSource.add( "Peak Usage    : init:2359296, used:13914944, committed:13959168, max:50331648Current Usage : init:2359296, used:13913536, committed:13959168, max:50331648|------------------| committed:13.31Mb+---------------------------------------------------------------------+|//////////////////|                                                  | max:48Mb+---------------------------------------------------------------------+|------------------| used:13.27Mb");
-        flatMapSource.add( "Peak Usage    : init:2359296, used:13916608, committed:13959168, max:50331648Current Usage : init:2359297, used:13915200, committed:13959168, max:50331648|------------------| committed:13.31Mb+---------------------------------------------------------------------+|//////////////////|                                                  | max:48Mb+---------------------------------------------------------------------+|------------------| used:13.27Mb");
-
-        List<Pattern> patterns = Arrays.asList(Pattern.compile("Current.*?[/|]"), Pattern.compile("[0-9]+(/,|/|)"));
-
-        log.debug("patterns : {}",patterns);
-        //Style 1
-        patterns.stream().flatMap(p1 -> flatMapSource.stream().map(p1::matcher).filter(Matcher::find).map(Matcher::group)).forEach(x -> log.debug("flatmap style1 value : {}", x));
-
-        //Style 2
-        patterns.stream().flatMap(p1 -> flatMapSource.stream().map(p1::matcher).filter(Matcher::find).map(matcher -> matcher.group())).forEach(x -> log.debug("flatmap style2 value : {}", x));
 
     }
 
