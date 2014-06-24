@@ -30,7 +30,8 @@ public class Streams2 {
         log.debug("stringCollection : {}", stringCollection);
 
         /**
-         * collect의 Collectors를 이용하여 map, set, list 형태로 결과를 리턴 받을 수 있다.
+         * collect
+         * Collectors를 이용하여 map, set, list 형태로 결과를 리턴 받을 수 있다.
          */
         List<String> result = stringCollection.stream().sorted().collect(Collectors.toList());
         log.debug("Collect Result : {}", result.toString());
